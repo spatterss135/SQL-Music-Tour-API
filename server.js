@@ -8,18 +8,7 @@ require('dotenv').config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
-// SEQUELIZE CONNECTION
-const sequelize = new Sequelize('music-tour', 'postgres', 'Strawhat987', {
-    dialect: 'postgres'
-})
 
-try {
-    sequelize.authenticate()
-    console.log('Connected to Postgres DB')
-
-} catch(err){
-    console.log(`Could not connect to DB due to error: ${err}`)
-}
 
 // ROOT
 app.get('/', (req, res) => {
@@ -28,9 +17,15 @@ app.get('/', (req, res) => {
     })
 })
 
-
+// CONTROLLERS 
+const bandsController = require('./controllers/bands_controller')
+app.use('/bands', bandsController)
+const eventsController = require('./controllers/events_controller')
+app.use('/events', eventsController)
+const stagesController = require('./controllers/stages_controller')
+app.use('/stages', stagesController)
 
 // LISTEN
 app.listen(process.env.PORT, () => {
-    console.log(`🎸 Rockin' on port: ${process.env.PG_URI}`)
+    console.log(`🎸 Rockin' on port: ${process.env.PORT}`)
 })
